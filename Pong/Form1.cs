@@ -32,7 +32,7 @@ namespace Pong
         // Sounds for game
         SoundPlayer scoreSound = new SoundPlayer(Properties.Resources.score);
         SoundPlayer collisionSound = new SoundPlayer(Properties.Resources.collision);
-       
+               
         //determines whether a key is being pressed or not
         Boolean aKeyDown, zKeyDown, jKeyDown, mKeyDown;
 
@@ -226,13 +226,13 @@ namespace Pong
                 ballMoveDown = false;
 
             }
-            // comment
+           
 
             #endregion
 
             #region ball collision with paddles
             // if the ball hits p1's paddle
-            if (ball.X < p1.X + p1.Width)
+            if (ball.IntersectsWith(p1))
             {
                 // change direction
                 ballMoveRight = true;
@@ -241,7 +241,7 @@ namespace Pong
                 collisionSound.Play();
             }
            
-            if (ball.X > p2.X - ball.Width && ball.Y < p2.Y && ball.Y > p2.Y - p2.Height)
+            if (ball.IntersectsWith(p2))
             {
                 // change direction
                 ballMoveRight = false;
@@ -263,28 +263,43 @@ namespace Pong
             if (ball.X < 0)  // ball hits left wall logic
             {
                 //play score sound
-
-                //update player 2 score
-                player2Score = player2Score + 1;
+                scoreSound.Play();
+                //update player 1 score
+                player1Score = player1Score + 1;
                 
-                // TODO use if statement to check to see if player 2 has won the game. If true run 
+                // Check to see if player 2 has won the game. If true run 
                 // GameOver method. Else change direction of ball and call SetParameters method.
-                if(player2Score == gameWinScore)
+                if(player1Score == gameWinScore)
                 {
-                    GameOver("Player 2");
+                    GameOver("Player 1");
+                }
+                else
+                {
+                    ballMoveRight = true;
+                    Thread.Sleep(1000);
+                    SetParameters();
                 }
             }
 
             // TODO same as above but this time check for collision with the right wall
             if (ball.X > this.Width)
             {
-                //update player 1 score
-                player1Score = player1Score + 1;
+                //update player 2 score
+                player2Score = player2Score + 1;
+
+                //Play score sound
+                scoreSound.Play();
 
                 //Check is player 1 has won
-                if (player1Score == gameWinScore)
+                if (player2Score == gameWinScore)
                 {
-                    GameOver("Player 1");
+                    GameOver("Player 2");
+                }
+                else
+                {
+                    ballMoveRight = false;
+                    Thread.Sleep(1000);
+                    SetParameters();
                 }
             }
             #endregion
