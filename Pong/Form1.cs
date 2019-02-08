@@ -264,14 +264,14 @@ namespace Pong
             {
                 //play score sound
                 scoreSound.Play();
-                //update player 1 score
-                player1Score = player1Score + 1;
+                //update player 2 score
+                player2Score = player2Score + 1;
                 
                 // Check to see if player 2 has won the game. If true run 
                 // GameOver method. Else change direction of ball and call SetParameters method.
-                if(player1Score == gameWinScore)
+                if(player2Score == gameWinScore)
                 {
-                    GameOver("Player 1");
+                    GameOver("Player 2");
                 }
                 else
                 {
@@ -284,16 +284,16 @@ namespace Pong
             // TODO same as above but this time check for collision with the right wall
             if (ball.X > this.Width)
             {
-                //update player 2 score
-                player2Score = player2Score + 1;
+                //update player 1 score
+                player1Score = player1Score + 1;
 
                 //Play score sound
                 scoreSound.Play();
 
                 //Check is player 1 has won
-                if (player2Score == gameWinScore)
+                if (player1Score == gameWinScore)
                 {
-                    GameOver("Player 2");
+                    GameOver("Player 1");
                 }
                 else
                 {
@@ -319,9 +319,15 @@ namespace Pong
 
             // TODO create game over logic
             // --- stop the gameUpdateLoop
+            gameUpdateLoop.Stop();
             // --- show a message on the startLabel to indicate a winner, (need to Refresh).
+            this.Refresh();
+            startLabel.Text = "Winner: " + winner;
+            this.Refresh();
             // --- pause for two seconds 
+            Thread.Sleep(2000);
             // --- use the startLabel to ask the user if they want to play again
+            startLabel.Text = "Play Again? /nSpace To Start";
 
         }
 
@@ -335,6 +341,8 @@ namespace Pong
             e.Graphics.FillEllipse(drawBrush, ball);
 
             // TODO draw scores to the screen using DrawString
+            e.Graphics.DrawString("" + player1Score, drawFont, drawBrush, 60, 40);
+            e.Graphics.DrawString("" + player2Score, drawFont, drawBrush, this.Width - 60, 40);
         }
 
     }
