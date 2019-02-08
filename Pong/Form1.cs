@@ -27,6 +27,8 @@ namespace Pong
 
         //graphics objects for drawing
         SolidBrush drawBrush = new SolidBrush(Color.White);
+        SolidBrush redBrush = new SolidBrush(Color.Red);
+        SolidBrush blueBrush = new SolidBrush(Color.Cyan);
         Font drawFont = new Font("Courier New", 10);
 
         // Sounds for game
@@ -42,7 +44,7 @@ namespace Pong
         //ball directions, speed, and rectangle
         Boolean ballMoveRight = true;
         Boolean ballMoveDown = true;
-        const int BALL_SPEED = 4;
+        const int BALL_SPEED = 6;
         Rectangle ball;
 
         //paddle speeds and rectangles
@@ -52,7 +54,7 @@ namespace Pong
         //player and game scores
         int player1Score = 0;
         int player2Score = 0;
-        int gameWinScore = 2;  // number of points needed to win game
+        int gameWinScore = 5;  // number of points needed to win game
 
         #endregion
 
@@ -264,9 +266,10 @@ namespace Pong
             {
                 //play score sound
                 scoreSound.Play();
+
                 //update player 2 score
                 player2Score = player2Score + 1;
-                
+                                
                 // Check to see if player 2 has won the game. If true run 
                 // GameOver method. Else change direction of ball and call SetParameters method.
                 if(player2Score == gameWinScore)
@@ -317,32 +320,34 @@ namespace Pong
         {
             newGameOk = true;
 
-            // TODO create game over logic
             // --- stop the gameUpdateLoop
             gameUpdateLoop.Stop();
+
             // --- show a message on the startLabel to indicate a winner, (need to Refresh).
-            this.Refresh();
+            startLabel.Visible = true;
             startLabel.Text = "Winner: " + winner;
             this.Refresh();
+
             // --- pause for two seconds 
-            Thread.Sleep(2000);
+            Thread.Sleep(2500);
+
             // --- use the startLabel to ask the user if they want to play again
-            startLabel.Text = "Play Again? /nSpace To Start";
+            startLabel.Text = "Play Again? \nSpace To Start";
 
         }
 
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
             //draw paddles using FillRectangle
-            e.Graphics.FillRectangle(drawBrush, p1);
-            e.Graphics.FillRectangle(drawBrush, p2);
+            e.Graphics.FillRectangle(redBrush, p1);
+            e.Graphics.FillRectangle(blueBrush, p2);
 
             //draw ball using FillRectangle
             e.Graphics.FillEllipse(drawBrush, ball);
 
             // TODO draw scores to the screen using DrawString
-            e.Graphics.DrawString("" + player1Score, drawFont, drawBrush, 60, 40);
-            e.Graphics.DrawString("" + player2Score, drawFont, drawBrush, this.Width - 60, 40);
+            e.Graphics.DrawString("Player One\n" + player1Score, drawFont, drawBrush, 60, 40);
+            e.Graphics.DrawString("Player Two\n" + player2Score, drawFont, drawBrush, this.Width - 140, 40);
         }
 
     }
